@@ -1,4 +1,4 @@
-\chapter{Introducción al problema}
+    \chapter{Introducción al problema}
 
 En este documento se describirá el proceso de confección de una metaheurística basada en un algoritmo genético para encontrar una solución al \textit{Maximum Diversity Problem}.
 
@@ -57,7 +57,7 @@ Como vemos, calcular esto no es una tarea fácil para un número arbitrario de $
         \end{axis}
         \end{tikzpicture}
     
-        \caption{Evolución del crecimiento del espacio de búsqueda en función de $n$, suponiendo que $m = 20$}
+        \caption{Evolución del crecimiento del espacio de búsqueda en función de $n$, suponiendo que $m = 20$. Vemos que cada línea en el eje $y$ supone un cambio en 5 órdenes de magnitud, lo cual es completamente inabarcable.}
         \label{fig:binom}
     
     \end{figure}
@@ -73,7 +73,45 @@ Antes de empezar con la descripción de la metaheurística en sí, debemos ser c
 \subsection{Formato de la solución}
 Un requisito que presenta nuestro problema es el valor de $m$, que corresponde al número de unos que presenta nuestra solución, o lo que se traduce a exactamente cuál es la mayor diversidad que podemos encontrar en $m$ elementos dada una matriz de distancias $D$.
 
-Para ello, se ha confeccionado una función \jesitt{shape\_solution} que recibe una solución y garantiza que esto es así. Consta de dos bucles while que preguntan por el número de unos (véase la ecuación \ref{eq:sum_m})
+Para ello, se ha confeccionado una función \jesitt{shape\_solution} que recibe una solución y garantiza que esto es así. Consta de dos bucles \jesitt{while} que preguntan por el número de unos (véase la ecuación \ref{eq:sum_m}), y de no ser el caso correcto, quitan o añaden aleatoriamente para formar correctamente la solución.
 
 
-\cite{GRASP}
+\subsection{Cálculo de la biodiversidad}
+El cálculo de la biodiversidad es un proceso delicado en el que debemos optimizar al máximo los recursos. Es una operación que se va a ejecutar una enorme cantidad de veces por iteración y es necesario que sea rápida.
+
+Se ha tenido en cuenta que el cálculo está basado en una matriz simétrica, lo que elimina ciertas opciones y puede dar lugar a un resultado más rápido.
+
+El algoritmo luce así:
+
+\begin{enumerate}
+    \item En primer lugar calculamos una matriz triangular similar a la nuestra con ceros y unos, y obtenemos los índices donde están los unos. Filtramos el vector resultante quedándonos solo con las parejas de índices en las que el primero sea menor que el segundo.
+    \item Dado nuestro vector solución $M$, calculamos todas las posibles combinaciones entre sus genotipos.
+    \item Repetimos el proceso anterior, pero con los índices de los genotipos.
+    \item Dado el vector con todas las combinaciones de índices de los genotipos, usamos el vector de índices para filtrar el vector de genotipos, quedándonos con las parejas de genotipos en las que el primer índice sea menor que el segundo. Es decir, usamos el vector de índices como máscara.
+    \item Esto nos deja con un vector de todas las combinaciones válidas de índices y otro de los genotipos en sí. Los combinamos por columnas.
+    \item Teniendo esta estructura de datos, tenemos la información que necesitamos. El cálculo se efectúa iterando por cada elemento de este último vector, multiplicando los dos genes involucrados con el valor que nos devuelva acceder a la matriz con los índices de dichos genotipos, tal y como en la ecuación \ref{max-diversity}.
+\end{enumerate}
+
+Este algoritmo hace un uso muy pronunciado de la programación funcional, evitando bucles o condicionales. En principio, se están considerando combinaciones que resultan en 0, ya que uno de los genotipos es 0 en muchos de los casos. Aún así, esto es más rápido que simplemente preguntar con un condicional por solo aquellas combinaciones que tengan un 1 en ambos. Además, utilizando las subrutinas en C de \jesitt{numpy}, esto acelera el proceso. Debemos tener en cuenta, aún así, que python es un lenguaje interpretado y que, necesariamente va a ser más lento que C++, ya que no está pensado para esto.
+
+
+\subsection{Paralelización del cálculo}
+Por último, hablaremos de optimización del rendimiento. Este problema es altamente paralelizable ya que, para cada generación, debemos tener un vector de diversidades que calcular, cada una independientemente, para luego compararlas y efectuar las demás operaciones del algoritmo genético.
+
+Es por ello que hacemos uso de paralelización del cálculo de la biodiversidad para cada solución en cada generación. Suponiendo que la población inicial es de 50 soluciones, paralelizamos el cálculo de la diversidad de cada una de esas soluciones, ya que son complmetamente independientes. Esto reduce el tiempo de cálculo en un 40\% aproximadamente. 
+
+Los ordenadores disponibles son:
+
+\begin{itemize}
+    \item MacBook Air, i7 11th gen, 4 núcleos con hyperthreading, 8 núcleos en total, 16GB RAM. MacOS 11.3.1, Python 3.9
+    \item PC HP con i7 6th gen, 4 núcleos con hyperthreading, 8 núcleos en total, 16 GB RAM. Ubuntu 20.04, Python 3.8
+\end{itemize}
+
+En ambos se obtiene un rendimiento similar, aunque la experimentación completa se acometió con el PC HP, que tiene un sistema de ventilación y refrigeración más apropiado que el de cualquier portátil, lo que implica que podrá mantener velocidades de procesador más altas durante más tiempo.
+
+
+\section{Implementación del algoritmo genético}
+En esta sección se discutirán las diferentes consideraciones para la implementación del algoritmo genético.
+
+
+
