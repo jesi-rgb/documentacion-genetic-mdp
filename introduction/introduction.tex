@@ -29,8 +29,6 @@ El problema se resume así a calcular qué combinación $x$ ofrece una diversida
 
 Como vemos, calcular esto no es una tarea fácil para un número arbitrario de $n$ o de $m$. Para dar un poco de perspectiva, el espacio de soluciones de un ejemplo con $n = 500$ y $m = 50$ es de $2.31 \times 10^{69}$. Se puede observar que el espacio de búsqueda es totalmente inabarcable, siendo este ejemplo uno considerado \textit{mediano}. Puede verse una evolución del crecimiento del espacio de búsqueda en la figura \ref{fig:binom}.
 
-
-
 \begin{figure}[h]
     \centering
     
@@ -100,15 +98,6 @@ Por último, hablaremos de optimización del rendimiento. Este problema es altam
 
 Es por ello que hacemos uso de paralelización del cálculo de la biodiversidad para cada solución en cada generación. Suponiendo que la población inicial es de 50 soluciones, paralelizamos el cálculo de la diversidad de cada una de esas soluciones, ya que son complmetamente independientes. Esto reduce el tiempo de cálculo en un 40\% aproximadamente. 
 
-Los ordenadores disponibles son:
-
-\begin{itemize}
-    \item MacBook Air, i7 11th gen, 4 núcleos con hyperthreading, 8 núcleos en total, 16GB RAM. MacOS 11.3.1, Python 3.9
-    \item PC HP con i7 6th gen, 4 núcleos con hyperthreading, 8 núcleos en total, 16 GB RAM. Ubuntu 20.04, Python 3.8
-\end{itemize}
-
-En ambos se obtiene un rendimiento similar, aunque la experimentación completa se acometió con el PC HP, que tiene un sistema de ventilación y refrigeración más apropiado que el de cualquier portátil, lo que implica que podrá mantener velocidades de procesador más altas durante más tiempo.
-
 
 \section{Implementación del algoritmo genético}
 En esta sección se discutirán las diferentes consideraciones para la implementación del algoritmo genético.
@@ -126,7 +115,7 @@ En nuestro caso particular, se utiliza un sistema basado en un contador de itera
 
 Aún así, podremos salir del bucle de otra forma. El contador de paciencia mide cuántas iteraciones llevamos sin obtener una mejor solución global. Si se calcula una generación en la que la mejor solución hasta ahora no mejora, el contador aumenta. Si el contador iguala al valor provisto de paciencia, se asumirá que el algoritmo ha convergido, no necesitando ejecutar todas las iteraciones que resten.
 
-Podemos ver una versión simplificada de nuestro algoritmo en el algoritmo \ref{alg:genetic}.
+Podemos ver una versión simplificada en el algoritmo \ref{alg:genetic}.
 
 \begin{algorithm}[h]
     G$_{0}$ = GenerateRandomSolutions(maxPopulation)\;
@@ -155,5 +144,36 @@ Podemos ver una versión simplificada de nuestro algoritmo en el algoritmo \ref{
     \caption{Breve resumen de la topología de nuestra versión del algoritmo genético.}
     \label{alg:genetic}
 \end{algorithm}
+
+\subsection{\jesitt{Selection}: elección de los mejores}
+La selección de los mejores individuos de cada generación se acomete mediante un parámetro \jesitt{k\_top} provisto, que toma las \jesitt{k\_top} mejores soluciones de la generación actual.
+
+\subsection{\jesitt{Crossover}: cruce entre soluciones}
+Para el crossover se han definido dos cruces: el cruce clásico y el cruce a dos puntos. Estos cruces están definidos en \cite{handbookMart}, así como en cualquier artículo relacionado con algoritmos genéticos.
+
+\section{Marco de trabajo y equipo utilizado}
+En esta sección explicaremos el equipo utilizado y el marco de trabajo de este proyecto, con objeto de que la replicación de la experimentación sea lo más sencilla posible.
+
+\subsection{Equipo utilizado}
+Comenzamos con el equipo utilizado. En cuanto a hardware, se dispone de estos equipos:
+
+\begin{itemize}
+    \item MacBook Air, i7 11th gen, 4 núcleos con hyperthreading, 8 núcleos en total, 16GB RAM. MacOS 11.3.1, Python 3.9
+    \item PC HP con i7 6th gen, 4 núcleos con hyperthreading, 8 núcleos en total, 16 GB RAM. Ubuntu 20.04, Python 3.8
+\end{itemize}
+
+En ambos se obtiene un rendimiento similar, aunque la experimentación completa se acometió con el PC HP, que tiene un sistema de ventilación y refrigeración más apropiado que el de cualquier portátil, lo que implica que podrá mantener velocidades de procesador más altas durante más tiempo.
+
+\subsection{Marco de trabajo}
+El marco de trabajo se inscribe en la utilización de Python para la implementación. La versión de Python es 3.8-3.9, que, para nuestro caso, pueden considerarse como similares ya que no se hace uso de las diferencias entre las distintas versiones.
+
+Se ha incidido en el uso de \jesitt{numpy} para la implementación, ya que es una interfaz bastante sencilla para subrutinas de C/C++, que son mucho más rápidas que Python puro. Por ello, toda la generación de números aleatorios y la computación de grandes matrices o vectores se ha acometido con \jesitt{numpy}. La semilla utilizada ha sido 7.
+
+\subsection{Instancias utilizadas}
+Para la ejecución del algoritmo, se han provisto una serie de 30 archivos con una lista de números, que corresponde a lo que sería la triangular superior de la matriz de distancias de nuestro problema. Estas instancias han sido probadas y se ha experimentado con ellas en otras ocasiones, por lo que podemos comparar los resultados fácilmente para ver cómo lo hace nuestra versión.
+
+\section{Resultados y estadísticas}
+Veremos en esta sección una serie de tablas comparativas con el trabajo previamente realizado en estas instancias en relación con los resultados que nosotros hemos obtenido.
+
 
 
