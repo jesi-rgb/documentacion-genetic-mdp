@@ -113,5 +113,47 @@ En ambos se obtiene un rendimiento similar, aunque la experimentación completa 
 \section{Implementación del algoritmo genético}
 En esta sección se discutirán las diferentes consideraciones para la implementación del algoritmo genético.
 
+\section{Topología}
+
+La topología de nuestro algoritmo es muy similar a la que podamos encontrar en cualquier libro, aunque se siguió especialmente la del libro \textit{Introduction to Evolutionary Computing}~\cite{evolutionaryEiben}, y la del \textit{Handbook of Heuristics}~\cite{handbookMart}.
+
+
+En esencia, generamos un conjunto de soluciones aleatoriamente y calculamos su diversidad. A partir de ahí, empieza el ciclo del algoritmo genético. Tomamos las mejores soluciones, las cruzamos, mutamos y calculamos diversidad, formando la nueva generación. Esta generación formada será la entrada para el siguiente ciclo en el que se repite todo.
+
+Este bucle se repite hasta que se alcance una condición de parada, que puede ser un tiempo límite, un número de iteraciones, etc.
+
+En nuestro caso particular, se utiliza un sistema basado en un contador de iteraciones máximo, así como un contador de \textit{paciencia}. En esencia, si superamos el máximo número de iteraciones provisto, devolvemos la mejor solución encontrada.
+
+Aún así, podremos salir del bucle de otra forma. El contador de paciencia mide cuántas iteraciones llevamos sin obtener una mejor solución global. Si se calcula una generación en la que la mejor solución hasta ahora no mejora, el contador aumenta. Si el contador iguala al valor provisto de paciencia, se asumirá que el algoritmo ha convergido, no necesitando ejecutar todas las iteraciones que resten.
+
+Podemos ver una versión simplificada de nuestro algoritmo en el algoritmo \ref{alg:genetic}.
+
+\begin{algorithm}[h]
+    G$_{0}$ = GenerateRandomSolutions(maxPopulation)\;
+    f$_{0}$ = Evaluate(G$_{0}$)
+
+    $i = 1$\;
+    \While{not stopCondition}{
+        parents $\gets$ Selection(G$_{i-1}$)\;
+        G$_{i}$ $\gets$ Crossover(parents)\;
+        f$_{i}$ $\gets$ Evaluate(G$_{i}$)\;
+
+        i $\gets$ i + 1\;
+        \eIf{lastBestSolution <= currentBestSolution}{
+            patience $\gets$ patience + 1\;
+        }
+        % else
+        {
+            patience $\gets$ 0\;
+        }
+
+        \If{i == maxIterations or patience == maxPatience}{
+            stopCondition $\gets$ True\;}
+        }
+        \Return BestSolution\;
+    
+    \caption{Breve resumen de la topología de nuestra versión del algoritmo genético.}
+    \label{alg:genetic}
+\end{algorithm}
 
 
