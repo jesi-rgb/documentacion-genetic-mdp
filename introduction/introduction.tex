@@ -33,14 +33,13 @@ Como vemos, calcular esto no es una tarea fácil para un número arbitrario de $
     \centering
     
     \begin{tikzpicture}
-        \centering
         \begin{axis}[
             axis lines = left,
             xlabel = $n$,
             ylabel = {$f(n)$},
             ymode = log,
             grid = major,
-            legend style = {at={(0.9,0.2)},
+            legend style = {at={(0.9,0.9)},
             anchor=north}
         ]
         %Below the red parabola is defined
@@ -58,7 +57,9 @@ Como vemos, calcular esto no es una tarea fácil para un número arbitrario de $
         \caption{Evolución del crecimiento del espacio de búsqueda en función de $n$, suponiendo que $m = 20$. Vemos que cada línea en el eje $y$ supone un cambio en 5 órdenes de magnitud, lo cual es completamente inabarcable.}
         \label{fig:binom}
     
-    \end{figure}
+\end{figure}
+
+
 
 
 \chapter{Detalles de la implementación}
@@ -172,8 +173,49 @@ Se ha incidido en el uso de \jesitt{numpy} para la implementación, ya que es un
 \subsection{Instancias utilizadas}
 Para la ejecución del algoritmo, se han provisto una serie de 30 archivos con una lista de números, que corresponde a lo que sería la triangular superior de la matriz de distancias de nuestro problema. Estas instancias han sido probadas y se ha experimentado con ellas en otras ocasiones, por lo que podemos comparar los resultados fácilmente para ver cómo lo hace nuestra versión.
 
+Las instancias utilizadas son un conjunto de 30 archivos agrupados de diez en diez, en los que el primer subconjunto contiene diez instancias con $m = 500, n=50$, el segundo, $n = 2000, m = 200$ y el tercero $n = 3000, m = 300, 400, 500 \ \text{y} \ 600$.
+
 \section{Resultados y estadísticas}
 Veremos en esta sección una serie de tablas comparativas con el trabajo previamente realizado en estas instancias en relación con los resultados que nosotros hemos obtenido.
 
 
 
+\begin{table}[h]
+    \centering
+    \begin{tabular}{@{}lc|cll@{}}
+        \toprule
+        \textbf{Archivo} & \multicolumn{1}{l|}{\textbf{n}} & \multicolumn{1}{l}{\textbf{m}} & \multicolumn{1}{l}{\textbf{Mejor solución}} & \textbf{Nuestra solución} \\ \midrule
+    MDG-a\_1\_n500\_m50 & \multirow{10}{*}{500} & \multirow{10}{*}{50} & 7833,83252 &  \\
+    MDG-a\_2\_n500\_m50 &  &  & 7771,66162 &  \\
+    MDG-a\_3\_n500\_m50 &  &  & 7759,35986 &  \\
+    MDG-a\_4\_n500\_m50 &  &  & 7770,2417 &  \\
+    MDG-a\_5\_n500\_m50 &  &  & 7755,23096 &  \\
+    MDG-a\_6\_n500\_m50 &  &  & 7773,70996 &  \\
+    MDG-a\_7\_n500\_m50 &  &  & 7771,73096 &  \\
+    MDG-a\_8\_n500\_m50 &  &  & 7750,88135 &  \\
+    MDG-a\_9\_n500\_m50 &  &  & 7770,0708 &  \\
+    MDG-a\_10\_n500\_m50 &  &  & 7780,35059 &  \\ \midrule
+    MDG-b\_21\_n2000\_m200 & \multirow{10}{*}{2000} & \multirow{10}{*}{20} & 11299894,86 &  \\
+    MDG-b\_22\_n2000\_m200 &  &  & 11286775,59 &  \\
+    MDG-b\_23\_n2000\_m200 &  &  & 11299940,87 &  \\
+    MDG-b\_24\_n2000\_m200 &  &  & 11290874,16 &  \\
+    MDG-b\_25\_n2000\_m200 &  &  & 11296066,66 &  \\
+    MDG-b\_26\_n2000\_m200 &  &  & 11292295,89 &  \\
+    MDG-b\_27\_n2000\_m200 &  &  & 11305676,85 &  \\
+    MDG-b\_28\_n2000\_m200 &  &  & 11279916,06 &  \\
+    MDG-b\_29\_n2000\_m200 &  &  & 11297188,33 &  \\
+    MDG-b\_30\_n2000\_m200 &  &  & 11296414,93 &  \\ \midrule
+    MDG-c\_1\_n3000\_m300 & \multirow{10}{*}{3000} & \multirow{2}{*}{300} & 24884110 &  \\
+    MDG-c\_2\_n3000\_m300 &  &  & 24905330 &  \\ \cmidrule(l){3-5} 
+    MDG-c\_8\_n3000\_m400 &  & \multirow{3}{*}{400} & 43437261 &  \\
+    MDG-c\_9\_n3000\_m400 &  &  & 43437861 &  \\
+    MDG-c\_10\_n3000\_m400 &  &  & 43476251 &  \\ \cmidrule(l){3-5} 
+    MDG-c\_13\_n3000\_m500 &  & \multirow{3}{*}{500} & 67014051 &  \\
+    MDG-c\_14\_n3000\_m500 &  &  & 66979606 &  \\
+    MDG-c\_15\_n3000\_m500 &  &  & 66992877 &  \\ \cmidrule(l){3-5} 
+    MDG-c\_19\_n3000\_m600 &  & \multirow{2}{*}{600} & 95633549 &  \\
+    MDG-c\_20\_n3000\_m600 &  &  & 95643586 &  \\ \bottomrule
+    \end{tabular}
+    \caption{Comparativa de resultados}
+    \label{tab:resultados}
+\end{table}
