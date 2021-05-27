@@ -60,7 +60,22 @@ Como vemos, calcular esto no es una tarea fácil para un número arbitrario de $
 \end{figure}
 
 \section{Estado del arte}
+Incluimos en la tabla \ref{tab:stateart} algunos de los artículos más interesantes que abarcan este problema y las metaheurísticas con las que se han intentado solucionar. Como vemos, es un problema que lleva mucho tiempo estudiándose y que, aún a día de hoy, se siguen sacando artículos interesantes en propuestas alternativas para su cálculo.
 
+\begin{table}[t]
+    \centering
+    \begin{tabular}{lll}
+        \toprule
+        \textbf{Título} & \textbf{Metaheurística} & \textbf{Año} \\ \midrule
+        GRASP and tabu search for the generalized \\ dispersion problem \cite{grasptabu} & GRASP - Tabu Search & 2021 \\ \midrule
+        Iterated greedy for the \\ maximum diversity problem \cite{iteratedgreedylozano} & Iterated Greedy &  2011 \\  \midrule
+        GRASP with Path-relinking for \\ the maximum diversity problem \cite{grasppathrelinking} & GRASP - Path Relinking & 2005 \\ \midrule
+        Analyzing and Modeling the \\ Maximum Diversity Problem \\ by Zero-One Programming \cite{nphard} & Zero-One Programming & 1993 \\
+        \bottomrule
+    \end{tabular}
+    \caption{Estado del arte en metaheurísticas para este problema}
+    \label{tab:stateart}
+\end{table}
 
 
 
@@ -68,6 +83,8 @@ Como vemos, calcular esto no es una tarea fácil para un número arbitrario de $
 \chapter{Detalles de la implementación}
 
 Describiremos en este capítulo las diferentes consideraciones tomadas de cara a la implementación del algoritmo genético, así como el cálculo de la diversidad de las soluciones.
+
+La implementación está alojada en \href{https://github.com/jesi-rgb/genetic-mdp}{este repositorio} público en GitHub, para quien desee consultar las diferentes decisiones de implementación aquí discutidas.
 
 \section{Consideraciones previas}
 Antes de empezar con la descripción de la metaheurística en sí, debemos ser capaces de, dada una potencial solución, calcular su diversidad. Además, debemos ser capaces de cerciorarnos de que dicha solución es válida, es decir, tiene exactamente $m$ unos.
