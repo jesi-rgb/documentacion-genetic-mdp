@@ -1,4 +1,4 @@
-    \chapter{Introducción al problema}
+\chapter{Introducción al problema}
 
 En este documento se describirá el proceso de confección de una metaheurística basada en un algoritmo genético para encontrar una solución al \textit{Maximum Diversity Problem}.
 
@@ -96,14 +96,14 @@ Para ello, se ha confeccionado una función \jesitt{shape\_solution} que recibe 
 
 
 \subsection{Cálculo de la diversidad}
-El cálculo de la diversidad es un proceso delicado en el que debemos optimizar al máximo los recursos. Es una operación que se va a ejecutar una enorme cantidad de veces por iteración y es necesario que sea rápida.
+El cálculo de la diversidad es un proceso delicado en el que debemos optimizar al máximo los recursos. Es una operación que se va a ejecutar una inmensa cantidad de veces por iteración y es necesario que sea rápida.
 
 Se ha tenido en cuenta que el cálculo está basado en una matriz simétrica, lo que elimina ciertas opciones y puede dar lugar a un resultado más rápido.
 
 El algoritmo luce así:
 
 \begin{enumerate}
-    \item En primer lugar calculamos una matriz triangular similar a la nuestra con ceros y unos, y obtenemos los índices donde están los unos. Filtramos el vector resultante quedándonos solo con las parejas de índices en las que el primero sea menor que el segundo.
+    \item En primer lugar calculamos una matriz de la misma forma que la nuestra, pero con unos en la triangular principal, y obtenemos los índices donde están los unos. Filtramos el vector resultante quedándonos solo con las parejas de índices en las que el primero sea menor que el segundo.
     \item Dado nuestro vector solución $M$, calculamos todas las posibles combinaciones entre sus genotipos.
     \item Repetimos el proceso anterior, pero con los índices de los genotipos.
     \item Dado el vector con todas las combinaciones de índices de los genotipos, usamos el vector de índices para filtrar el vector de genotipos, quedándonos con las parejas de genotipos en las que el primer índice sea menor que el segundo. Es decir, usamos el vector de índices como máscara.
@@ -117,9 +117,9 @@ Este algoritmo hace un uso muy pronunciado de la programación funcional, evitan
 \subsection{Paralelización del cálculo}
 Por último, hablaremos de optimización del rendimiento. Este problema es altamente paralelizable ya que, para cada generación, debemos tener un vector de diversidades que calcular, cada una independientemente, para luego compararlas y efectuar las demás operaciones del algoritmo genético.
 
-Es por ello que hacemos uso de paralelización del cálculo de la diversidad para cada solución en cada generación. Suponiendo que la población inicial es de 50 soluciones, paralelizamos el cálculo de la diversidad de cada una de esas soluciones, ya que son complmetamente independientes. Esto reduce el tiempo de cálculo en un 40\% aproximadamente. 
+Es por ello que hacemos uso de paralelización del cálculo de la diversidad para cada solución en cada generación. Suponiendo que la población inicial es de 50 soluciones, paralelizamos el cálculo de la diversidad de cada una de esas soluciones, ya que son complmetamente independientes. Esto reduce el tiempo de cálculo radicalmente.
 
-Podemos ver en la figura \ref{fig:time_comp}, la mejora de tiempo es muy drástica, pasando de los miles de segundos a los cientos de segundos. 
+Podemos ver en la figura \ref{fig:time_comp}, la mejora de tiempo es muy drástica, pasando de los miles de segundos a los cientos de segundos. 100 segundos es un minuto y cuarenta segundos, mientras que 1000 minutos es algo más de un cuarto de hora.
 
 La gráfica solo muestra las ejecuciones en las instancias de $n = 500$ y $n = 50$, ya que las otras no pudieron llegar a ejecutarse.
 
@@ -208,6 +208,7 @@ Para la ejecución del algoritmo, se han provisto una serie de 30 archivos con u
 
 Las instancias utilizadas son un conjunto de 30 archivos agrupados de diez en diez, en los que el primer subconjunto contiene diez instancias con $m = 500, n=50$, el segundo, $n = 2000, m = 200$ y el tercero $n = 3000, m = 300, 400, 500 \ \text{y} \ 600$.
 
+\newpage
 \section{Resultados y estadísticas}
 Veremos en esta sección una serie de tablas comparativas con el trabajo previamente realizado en estas instancias en relación con los resultados que nosotros hemos obtenido.
 
@@ -217,7 +218,7 @@ En esencia, lo que define a un buen algoritmo genético es la eficiencia de la e
 
 En la tabla \ref{tab:resultados} podemos ver los resultados de forma numérica, si así se desea. Las gráficas muestran la misma información por grupos de archivos, ya que los resultados varían enormemente entre los resultados y no es representativo agruparlos en una única gráfica.
 
-Los mejores resultados, es decir, los más cercanos a los que tomamos de referencia, se han obtenido en el grupo de $n = 3000$. Esto tiene sentido, ya que al ser un espacio tan enorme, probablemente no se haya hecho tanto hincapié en su investigación. Los espacios más pequeños se han trabajado mucho más y se han podido encontrar mejores soluciones.
+Los mejores resultados, es decir, los más cercanos a los que tomamos de referencia, se han obtenido en el grupo de $n = 3000$. Esto tiene sentido, ya que al ser un espacio tan enorme, probablemente no se haya hecho tanto hincapié en su investigación. Los espacios más pequeños se han trabajado mucho más y en los que se han podido encontrar mejores soluciones.
 
 \begin{figure}[h]
     \centering
